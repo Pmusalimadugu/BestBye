@@ -25,6 +25,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +39,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -43,8 +51,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     //vars
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mImageUrls = new ArrayList<>();
+    private static String[] assetFiles;
+    private static String[] localFiles;
+    private static JSONObject[] JSONS;
+    private static String[] names;
+    private static String[] expDates;
+    private static String[] imgs;
+
+
 
 
     public String readJSONAssets(Context context, String location) {
@@ -108,21 +122,7 @@ public class MainActivity extends AppCompatActivity {
         return file.exists();
     }
 
-    public String[] getLocalFiles() {
-        return getFilesDir().list();
-    }
 
-    public String[] getAssetFiles() {
-        String[] assetFiles = new String[0];
-
-        try {
-            assetFiles = getAssets().list("");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return assetFiles;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         **/
 
 
-        String[] assetFiles = new String[0];
+        assetFiles = new String[0];
 
         try {
             assetFiles = getAssets().list("");
@@ -181,19 +181,65 @@ public class MainActivity extends AppCompatActivity {
          }
 
 
-        String[] localFiles = getFilesDir().list();
+         localFiles = getFilesDir().list();
+         String[] JSONString = new String[localFiles.length];
+          JSONS = new JSONObject[localFiles.length];
+          names = new String[localFiles.length];
+          expDates = new String[localFiles.length];
+          imgs = new String[localFiles.length];
 
          for (int i = 0; i < localFiles.length; i++) {
              Log.e("KYSKYSKYSKYS", localFiles[i]);
+             JSONString[i] = readJSON(getApplicationContext(), localFiles[i]);
          }
 
+        for (int i = 0; i < localFiles.length; i++) {
+            try {
+                JSONS[i] = new JSONObject(JSONString[i]);
+            }catch (JSONException err){
+                Log.d("Error", err.toString());
+            }
+        }
+
+        for (int i = 0; i < localFiles.length; i++) {
+            try {
+
+                JSONObject temp = (JSONObject)JSONS[i].getJSONArray("products").get(0);
+
+
+                imgs[i] = temp.getString("images");
+                names[i] = temp.getString("product_name");
+
+                imgs[i] = imgs[i].replace("\\", "");
+                imgs[i] = imgs[i].replace("[", "");
+                imgs[i] = imgs[i].replace("]", "");
+
+
+                Log.d("IMAGES", imgs[i]);
+                Log.d("NAMES", names[i]);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
 
 
 
 
 
+    }
 
+    public static String[] getFiles() {
+        return localFiles;
+    }
+
+    public static String[] getImgs() {
+        return imgs;
+    }
+
+    public static String[] getNames() {
+        return names;
     }
 
 
