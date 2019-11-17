@@ -20,6 +20,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 
@@ -32,16 +34,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    private static final String TAG = "MainActivity";
+
+    //vars
+    private ArrayList<String> mNames = new ArrayList<>();
+    private ArrayList<String> mImageUrls = new ArrayList<>();
+
 
     public String readJSONAssets(Context context, String location) {
         String json = null;
@@ -104,6 +108,22 @@ public class MainActivity extends AppCompatActivity {
         return file.exists();
     }
 
+    public String[] getLocalFiles() {
+        return getFilesDir().list();
+    }
+
+    public String[] getAssetFiles() {
+        String[] assetFiles = new String[0];
+
+        try {
+            assetFiles = getAssets().list("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return assetFiles;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,17 +154,50 @@ public class MainActivity extends AppCompatActivity {
 
         //mystuff
 
-        //Log.d("ASDFASDFASDFADFASDF","this is a test poggers");
-        //String data = readJSONAssets(getApplicationContext(), "sample.json");
-        //Log.e("ASDADSASDADSASD", data);
+        /**
 
-        //createJSON(getApplicationContext(), "sample.json", data);
-        //String data2 = readJSON(getApplicationContext(), "sample.json");
-        //Log.e("THISISATESTPOGPOGPOG", data2);
+        Log.d("ASDFASDFASDFADFASDF","this is a test");
+        String data = readJSONAssets(getApplicationContext(), "sample.json");
+        Log.e("ASDADSASDADSASD", data);
+
+        createJSON(getApplicationContext(), "sample.json", data);
+        String data2 = readJSON(getApplicationContext(), "sample.json");
+        Log.e("THISISATESTPOGPOGPOG", data2);
+
+        **/
+
+
+        String[] assetFiles = new String[0];
+
+        try {
+            assetFiles = getAssets().list("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+         for (int i = 1; i < assetFiles.length-1; i++) {
+            Log.e("POGPOGPOGPOG", assetFiles[i]);
+            createJSON(getApplicationContext(), assetFiles[i], readJSONAssets(getApplicationContext(), assetFiles[i]));
+
+         }
+
+
+        String[] localFiles = getFilesDir().list();
+
+         for (int i = 0; i < localFiles.length; i++) {
+             Log.e("KYSKYSKYSKYS", localFiles[i]);
+         }
+
+
+
+
+
 
 
 
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
