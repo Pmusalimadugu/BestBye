@@ -23,9 +23,15 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    public String getJsonData(Context context, String location) {
+    public String readJSONAssets(Context context, String location) {
         String json = null;
         try {
             InputStream is = context.getAssets().open(location);
@@ -54,6 +60,48 @@ public class MainActivity extends AppCompatActivity {
         Log.e("data", json);
         return json;
 
+
+
+    }
+
+    public String readJSON(Context context, String fileName) {
+        try {
+            FileInputStream fis = context.openFileInput(fileName);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            return sb.toString();
+        } catch (FileNotFoundException fileNotFound) {
+            return null;
+        } catch (IOException ioException) {
+            return null;
+        }
+    }
+
+    public boolean createJSON(Context context, String fileName, String jsonString){
+        try {
+            FileOutputStream fos = context.openFileOutput(fileName,Context.MODE_PRIVATE);
+            if (jsonString != null) {
+                fos.write(jsonString.getBytes());
+            }
+            fos.close();
+            return true;
+        } catch (FileNotFoundException fileNotFound) {
+            return false;
+        } catch (IOException ioException) {
+            return false;
+        }
+
+    }
+
+    public boolean isJSONPresent(Context context, String fileName) {
+        String path = context.getFilesDir().getAbsolutePath() + "/" + fileName;
+        File file = new File(path);
+        return file.exists();
     }
 
     @Override
@@ -84,9 +132,16 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
-        Log.d("ASDFASDFASDFADFASDF","this is a test poggers");
-        String data = getJsonData(getApplicationContext(), "sample.json");
-        Log.e("ASDADSASDADSASD", data);
+        //mystuff
+
+        //Log.d("ASDFASDFASDFADFASDF","this is a test poggers");
+        //String data = readJSONAssets(getApplicationContext(), "sample.json");
+        //Log.e("ASDADSASDADSASD", data);
+
+        //createJSON(getApplicationContext(), "sample.json", data);
+        //String data2 = readJSON(getApplicationContext(), "sample.json");
+        //Log.e("THISISATESTPOGPOGPOG", data2);
+
 
 
     }
