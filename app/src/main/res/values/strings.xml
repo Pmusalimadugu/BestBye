@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Best Bye</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Best Bye</string>
+    <string name="nav_header_subtitle">Apollo 8</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">View Images</string>
+    <string name="menu_slideshow">Clear all Items</string>
+    <string name="menu_tools">Settings</string>
+    <string name="menu_share">Update</string>
+    <string name="menu_send">Export List</string>
+</resources>
