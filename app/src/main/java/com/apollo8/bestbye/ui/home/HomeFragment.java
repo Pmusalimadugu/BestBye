@@ -47,11 +47,15 @@ public class HomeFragment extends Fragment {
 
         String[] names = MainActivity.getNames();
         String[] imgs = MainActivity.getImgs();
+        Double[] dates = MainActivity.getScnDate();
 
         for (int i = 0; i < names.length; i++) {
             mImageUrls.add(imgs[i]);
-            mNames.add(names[i]);
+            mNames.add(names[i]+ "\n " + dates[i].toString());
         }
+
+
+        /**
 
         mImageUrls.add("https://c1.staticflickr.com/5/4636/25316407448_de5fbf183d_o.jpg");
         mNames.add("Havasu Falls");
@@ -81,6 +85,8 @@ public class HomeFragment extends Fragment {
 
         mImageUrls.add("https://i.imgur.com/ZcLLrkY.jpg");
         mNames.add("Washington");
+
+        **/
 
         Log.d(TAG, "initRecyclerView: init recyclerview.");
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);

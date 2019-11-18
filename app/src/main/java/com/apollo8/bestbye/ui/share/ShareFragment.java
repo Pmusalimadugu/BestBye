@@ -221,7 +221,7 @@ public class ShareFragment extends Fragment {
         {
             for(BluetoothDevice device : pairedDevices)
             {
-                if(device.getName().equals("raspberrypi-0")) //Note, you will need to change this to match the name of your device
+                if(device.getName().equals("raspberrypi")) //Note, you will need to change this to match the name of your device
                 {
                     Log.e("Aquarium",device.getName());
                     mmDevice = device;

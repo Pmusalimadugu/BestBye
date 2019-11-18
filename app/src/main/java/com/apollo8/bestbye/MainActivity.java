@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private static String[] names;
     private static String[] expDates;
     private static String[] imgs;
+    private static Double[] scnDate;
 
 
 
@@ -187,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
           names = new String[localFiles.length];
           expDates = new String[localFiles.length];
           imgs = new String[localFiles.length];
+          scnDate = new Double[localFiles.length];
 
          for (int i = 0; i < localFiles.length; i++) {
              Log.e("KYSKYSKYSKYS", localFiles[i]);
@@ -209,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
                 imgs[i] = temp.getString("images");
                 names[i] = temp.getString("product_name");
+                scnDate[i] = JSONS[i].getDouble("scan_date");
+
 
                 imgs[i] = imgs[i].replace("\\", "");
                 imgs[i] = imgs[i].replace("[", "");
@@ -217,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("IMAGES", imgs[i]);
                 Log.d("NAMES", names[i]);
+                Log.d("DATES", scnDate[i].toString());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -241,6 +246,10 @@ public class MainActivity extends AppCompatActivity {
     public static String[] getNames() {
         return names;
     }
+
+    public static Double[] getScnDate() { return scnDate; }
+
+
 
 
 
