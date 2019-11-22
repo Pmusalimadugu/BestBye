@@ -7,7 +7,7 @@
 
 
     <ImageButton
-        android:id="@+id/deleteButton"
+        android:id="@+id/funButton"
         android:layout_width="208dp"
         android:layout_height="210dp"
         android:layout_marginStart="101dp"
@@ -54,7 +54,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonCancel2"
+        android:id="@+id/buttonCancel3"
         android:layout_width="120dp"
         android:layout_height="110dp"
         android:layout_marginEnd="62dp"

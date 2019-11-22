@@ -81,7 +81,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void removeAt(int position) {
-        MainActivity.deleteFile(mContext, position);
+        //MainActivity.deleteFile(mContext, position);
         mImageNames.remove(position);
         mImages.remove(position);
         notifyItemRemoved(position);

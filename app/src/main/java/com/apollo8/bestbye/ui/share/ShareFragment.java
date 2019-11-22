@@ -39,7 +39,7 @@ public class ShareFragment extends Fragment {
         });
 
         final AppCompatButton btnYes2 = root.findViewById(R.id.buttonSync);
-        final AppCompatButton btnCancel3 = root.findViewById(R.id.buttonCancel2);
+        final AppCompatButton btnCancel3 = root.findViewById(R.id.buttonCancel3);
 
 
         btnYes2.setOnClickListener(new View.OnClickListener() {
