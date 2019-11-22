@@ -18,7 +18,11 @@ import com.apollo8.bestbye.MainActivity;
 import com.apollo8.bestbye.R;
 import com.apollo8.bestbye.RecyclerViewAdapter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -47,15 +51,22 @@ public class HomeFragment extends Fragment {
 
         String[] names = MainActivity.getNames();
         String[] imgs = MainActivity.getImgs();
-        Double[] dates = MainActivity.getScnDate();
+        Double[] epochDates = MainActivity.getScnDate();
+
+
 
         for (int i = 0; i < names.length; i++) {
+
+            Date date = new Date(epochDates[i].longValue() * 1000L);
+            DateFormat format = new SimpleDateFormat("MM-dd-yyy");
+            format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+            String formatted = format.format(date);
             mImageUrls.add(imgs[i]);
-            mNames.add(names[i]+ "\n " + dates[i].toString());
+            mNames.add(names[i]+ "\n " + "Expiration date: " + formatted);
         }
 
 
-        /**
+
 
         mImageUrls.add("https://c1.staticflickr.com/5/4636/25316407448_de5fbf183d_o.jpg");
         mNames.add("Havasu Falls");
@@ -86,7 +97,7 @@ public class HomeFragment extends Fragment {
         mImageUrls.add("https://i.imgur.com/ZcLLrkY.jpg");
         mNames.add("Washington");
 
-        **/
+
 
         Log.d(TAG, "initRecyclerView: init recyclerview.");
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);

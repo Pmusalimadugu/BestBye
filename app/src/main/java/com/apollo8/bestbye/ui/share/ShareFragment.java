@@ -38,6 +38,9 @@ import com.apollo8.bestbye.MainActivity;
 import com.apollo8.bestbye.R;
 //import com.apollo8.bestbye.MainActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -58,17 +61,27 @@ public class ShareFragment extends Fragment {
     public void sendBtMsg(String msg2send){
         //UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); //Standard SerialPortService ID
         UUID uuid = UUID.fromString("94f39d29-7d6d-437d-973b-fba39e49d4ee"); //Standard SerialPortService ID
+
+
         try {
 
             mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
-            if (!mmSocket.isConnected()){
-                mmSocket.connect();
+
+            if (mmDevice != null) {
+
+                if (!mmSocket.isConnected()){
+                    mmSocket.connect();
+                }
+
+
+                String msg = msg2send;
+                //msg += "\n";
+                OutputStream mmOutputStream = mmSocket.getOutputStream();
+                mmOutputStream.write(msg.getBytes());
             }
 
-            String msg = msg2send;
-            //msg += "\n";
-            OutputStream mmOutputStream = mmSocket.getOutputStream();
-            mmOutputStream.write(msg.getBytes());
+
+
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -93,8 +106,8 @@ public class ShareFragment extends Fragment {
         final Handler handler = new Handler();
 
         final ImageButton refreshButton = root.findViewById(R.id.refresh_button);
-        final ImageButton lightOnButton = root.findViewById(R.id.refresh_button);
-        final ImageButton lightOffButton = root.findViewById(R.id.refresh_button);
+        final ImageButton lightOnButton = root.findViewById(R.id.light_on_button);
+        final ImageButton lightOffButton = root.findViewById(R.id.light_off_button);
         final TextView myLabel = root.findViewById(R.id.output_label);
 
 
@@ -128,7 +141,7 @@ public class ShareFragment extends Fragment {
 
                             byte[] packetBytes = new byte[bytesAvailable];
                             Log.e("Aquarium recv bt","bytes available");
-                            byte[] readBuffer = new byte[1024];
+                            byte[] readBuffer = new byte[bytesAvailable];
                             mmInputStream.read(packetBytes);
 
                             for(int i=0;i<bytesAvailable;i++)
@@ -146,7 +159,14 @@ public class ShareFragment extends Fragment {
                                     {
                                         public void run()
                                         {
-                                            myLabel.setText(data);
+                                            Log.e("DATA", data);
+                                            JSONArray temp = new JSONArray();
+                                            try {
+                                                temp = new JSONArray(data);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            myLabel.setText(Integer.toString(temp.length()));
                                         }
                                     });
 
@@ -182,8 +202,12 @@ public class ShareFragment extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on temp button click
-
-                (new Thread(new workerThread("temp"))).start();
+                String[] barcodes = MainActivity.getBarcodes();
+                String output = "";
+                for (int i = 0; i < barcodes.length; i++) {
+                    output += barcodes[i] + " ";
+                }
+                (new Thread(new workerThread(output + "\n" + output))).start();
 
             }
         });

@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private static String[] expDates;
     private static String[] imgs;
     private static Double[] scnDate;
+    private static String[] barcodes;
+    private static String[] JSONString;
 
 
 
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public String readJSON(Context context, String fileName) {
+    public static String readJSON(Context context, String fileName) {
         try {
             FileInputStream fis = context.openFileInput(fileName);
             InputStreamReader isr = new InputStreamReader(fis);
@@ -123,6 +125,12 @@ public class MainActivity extends AppCompatActivity {
         return file.exists();
     }
 
+    public static void deleteFile(Context context, int index) {
+        Log.e("DELETE", "" + index);
+        context.deleteFile("sample" + index + ".json");
+        updateView(context);
+    }
+
 
 
     @Override
@@ -135,8 +143,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Add an Item", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                setContentView(R.layout.fragment_gallery);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -168,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         **/
 
 
+
         assetFiles = new String[0];
 
         try {
@@ -182,13 +192,15 @@ public class MainActivity extends AppCompatActivity {
          }
 
 
+        /**
          localFiles = getFilesDir().list();
-         String[] JSONString = new String[localFiles.length];
+         JSONString = new String[localFiles.length];
           JSONS = new JSONObject[localFiles.length];
           names = new String[localFiles.length];
           expDates = new String[localFiles.length];
           imgs = new String[localFiles.length];
           scnDate = new Double[localFiles.length];
+          barcodes = new String[localFiles.length];
 
          for (int i = 0; i < localFiles.length; i++) {
              Log.e("KYSKYSKYSKYS", localFiles[i]);
@@ -212,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
                 imgs[i] = temp.getString("images");
                 names[i] = temp.getString("product_name");
                 scnDate[i] = JSONS[i].getDouble("scan_date");
+                barcodes[i] = temp.getString("barcode_number");
 
 
                 imgs[i] = imgs[i].replace("\\", "");
@@ -221,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("IMAGES", imgs[i]);
                 Log.d("NAMES", names[i]);
+                Log.d("BARCODES", barcodes[i]);
                 Log.d("DATES", scnDate[i].toString());
 
             } catch (JSONException e) {
@@ -228,11 +242,66 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        **/
+
+
+        updateView(getApplicationContext());
 
 
 
 
+    }
 
+    private static void updateView(Context context) {
+
+        localFiles = context.getFilesDir().list();
+        JSONString = new String[localFiles.length];
+        JSONS = new JSONObject[localFiles.length];
+        names = new String[localFiles.length];
+        expDates = new String[localFiles.length];
+        imgs = new String[localFiles.length];
+        scnDate = new Double[localFiles.length];
+        barcodes = new String[localFiles.length];
+
+        for (int i = 0; i < localFiles.length; i++) {
+            Log.e("KYSKYSKYSKYS", localFiles[i]);
+            JSONString[i] = readJSON(context, localFiles[i]);
+        }
+
+        for (int i = 0; i < localFiles.length; i++) {
+            try {
+                JSONS[i] = new JSONObject(JSONString[i]);
+            }catch (JSONException err){
+                Log.d("Error", err.toString());
+            }
+        }
+
+        for (int i = 0; i < localFiles.length; i++) {
+            try {
+
+                JSONObject temp = (JSONObject)JSONS[i].getJSONArray("products").get(0);
+
+
+                imgs[i] = temp.getString("images");
+                names[i] = temp.getString("product_name");
+                scnDate[i] = JSONS[i].getDouble("scan_date");
+                barcodes[i] = temp.getString("barcode_number");
+
+
+                imgs[i] = imgs[i].replace("\\", "");
+                imgs[i] = imgs[i].replace("[", "");
+                imgs[i] = imgs[i].replace("]", "");
+
+
+                Log.d("IMAGES", imgs[i]);
+                Log.d("NAMES", names[i]);
+                Log.d("BARCODES", barcodes[i]);
+                Log.d("DATES", scnDate[i].toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static String[] getFiles() {
@@ -245,6 +314,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static String[] getNames() {
         return names;
+    }
+
+    public static String[] getBarcodes() {
+        return barcodes;
     }
 
     public static Double[] getScnDate() { return scnDate; }

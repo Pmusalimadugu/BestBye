@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.w3c.dom.Text;
 
@@ -62,8 +63,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + mImageNames.get(position));
-
-                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "Removed: " + mImageNames.get(position), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                removeAt(position);
                 /**
                 Intent intent = new Intent(mContext, GalleryActivity.class);
                 intent.putExtra("image_url", mImages.get(position));
@@ -77,6 +78,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return mImageNames.size();
+    }
+
+    public void removeAt(int position) {
+        MainActivity.deleteFile(mContext, position);
+        mImageNames.remove(position);
+        mImages.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mImageNames.size());
     }
 
 
