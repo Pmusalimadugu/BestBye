@@ -38,8 +38,8 @@ public class SlideshowFragment extends Fragment {
             }
         });
 
-        final AppCompatButton btnYes = root.findViewById(R.id.buttonYes);
-        final AppCompatButton btnCancel = root.findViewById(R.id.buttonCancel);
+        final AppCompatButton btnYes = root.findViewById(R.id.btnYes);
+        final AppCompatButton btnCancel = root.findViewById(R.id.btnCancel);
 
 
         btnYes.setOnClickListener(new View.OnClickListener() {
